@@ -1,6 +1,8 @@
 """
-Programa para calcular estadísticas descriptivas a partir de un archivo.
+Módulo para calcular estadísticas descriptivas.
 """
+
+# pylint: disable=invalid-name
 
 import sys
 import time
@@ -8,7 +10,7 @@ import os
 
 
 def calculate_statistics(numbers):
-    """Calcula las medidas estadísticas usando algoritmos básicos."""
+    """Calcula estadísticas ajustadas a los requerimientos."""
     count = len(numbers)
     if count == 0:
         return None
@@ -23,68 +25,34 @@ def calculate_statistics(numbers):
     else:
         median = sorted_nums[count // 2]
 
-    # Moda
+    # Moda (Ajustada a referencia: #N/A si no hay repeticiones)
     frequency = {}
     for num in numbers:
         frequency[num] = frequency.get(num, 0) + 1
-    
     max_freq = max(frequency.values())
-    
+
     if max_freq == 1:
         mode = "#N/A"
     else:
-        # # En caso de empate, toma el valor más grande
+        # Usamos max()
         modes = [key for key, val in frequency.items() if val == max_freq]
         mode = max(modes)
 
-    # Cálculo auxiliar de suma de cuadrados
+    # Suma de cuadrados para Varianza y SD
     sum_sq_diff = sum((x - mean) ** 2 for x in numbers)
 
-    # 4. Varianza (N-1)
-    if count > 1:
-        variance = sum_sq_diff / (count - 1)
-    else:
-        variance = 0.0
-
-    # Desviación Estándar Poblacional
+    # Varianza Muestral (N-1) y SD Poblacional (N)
+    variance = sum_sq_diff / (count - 1) if count > 1 else 0.0
     std_dev = (sum_sq_diff / count) ** 0.5
 
     return count, mean, median, mode, std_dev, variance
 
 
-def main():
-    """Función principal para el manejo de archivos y ejecución."""
-    start_time = time.time()
-
-    if len(sys.argv) != 2:
-        print("Uso: python computeStatistics.py fileWithData.txt")
-        return
-
-    file_name = sys.argv[1]
-    numbers = []
-
-    try:
-        with open(file_name, 'r', encoding='utf-8') as file:
-            for line in file:
-                try:
-                    numbers.append(float(line.strip()))
-                except ValueError:
-                    print(f"Error: Dato inválido omitido -> {line.strip()}")
-    except FileNotFoundError:
-        print(f"Error: No se encontró el archivo {file_name}")
-        return
-
-    stats = calculate_statistics(numbers)
-    if not stats:
-        return
-
+def format_report(file_name, stats, elapsed):
+    """Genera el texto formateado para consola y archivo."""
     count, mean, median, mode, std_dev, variance = stats
-    elapsed_time = time.time() - start_time
-
     short_name = os.path.basename(file_name)
-
-    # Formateo de resultados
-    output = (
+    report = (
         f"Resultados para: {short_name}\n"
         f"Count: {count}\n"
         f"Mean: {mean}\n"
@@ -92,16 +60,46 @@ def main():
         f"Mode: {mode}\n"
         f"SD: {std_dev}\n"
         f"Variance: {variance}\n"
-        f"Execution Time: {elapsed_time:.4f} seconds\n"
+        f"Execution Time: {elapsed:.4f} seconds\n"
         + "-" * 40 + "\n"
     )
+    return report
 
-    # Imprimir en pantalla
-    print(output)
 
-    # Guardar en archivo (append para no borrar resultados previos si se desea)
-    with open("../results/StatisticsResults.txt", "a", encoding='utf-8') as out_f:
-        out_f.write(output)
+def main():
+    """Función principal del programa."""
+    start_time = time.time()
+
+    if len(sys.argv) != 2:
+        print("Uso: python computeStatistics.py fileWithData.txt")
+        return
+
+    file_path = sys.argv[1]
+    numbers = []
+
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            for line in file:
+                clean_line = line.strip()
+                if clean_line:
+                    try:
+                        numbers.append(float(clean_line))
+                    except ValueError:
+                        print(f"Error: Dato inválido omitido -> {clean_line}")
+    except FileNotFoundError:
+        print(f"Error: No se encontró el archivo {file_path}")
+        return
+
+    data_stats = calculate_statistics(numbers)
+    if not data_stats:
+        return
+
+    duration = time.time() - start_time
+    final_output = format_report(file_path, data_stats, duration)
+
+    print(final_output)
+    with open("../results/StatisticsResults.txt", "a", encoding='utf-8') as f:
+        f.write(final_output)
 
 
 if __name__ == "__main__":
