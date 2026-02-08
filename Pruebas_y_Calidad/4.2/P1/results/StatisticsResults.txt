@@ -1,71 +1,63 @@
-TC: ./../tests/TC1.txt
-Media: 242.32
-Mediana: 239.5
-Moda: Multiple
-Desviación Estándar: 145.25810683056557
-Varianza: 21099.917599999997
-Tiempo de ejecución: 0.0003 segundos
-------------------------------
-Resultados para: ./../tests/TC1.txt
+Resultados para: TC1.txt
 Count: 400
 Mean: 242.32
 Median: 239.5
-Mode: Multiple
+Mode: 393.0
 SD: 145.25810683056557
-Variance: 21099.917599999997
+Variance: 21152.79959899749
 Execution Time: 0.0004 seconds
 ----------------------------------------
-Resultados para: ./../tests/TC2.txt
+Resultados para: TC2.txt
 Count: 1977
 Mean: 250.7840161861406
 Median: 247.0
 Mode: 230.0
 SD: 144.17131868884064
-Variance: 20785.369132479253
-Execution Time: 0.0011 seconds
+Variance: 20795.888043983545
+Execution Time: 0.0020 seconds
 ----------------------------------------
-Resultados para: ./../tests/TC3.txt
+Resultados para: TC3.txt
 Count: 12624
 Mean: 249.77621989860583
 Median: 249.0
 Mode: 94.0
 SD: 145.3178498091797
-Variance: 21117.277473163307
-Execution Time: 0.0061 seconds
+Variance: 21118.950393821877
+Execution Time: 0.0072 seconds
 ----------------------------------------
-Resultados para: ./../tests/TC4.txt
+Resultados para: TC4.txt
 Count: 12624
 Mean: 149.00267347908746
 Median: 147.75
 Mode: 123.75
 SD: 130.41441961308902
-Variance: 17007.92084301886
-Execution Time: 0.0071 seconds
+Variance: 17009.268218511454
+Execution Time: 0.0065 seconds
 ----------------------------------------
-Resultados para: ./../tests/TC5.txt
+Resultados para: TC5.txt
 Count: 307
 Mean: 241.49511400651465
 Median: 241.0
-Mode: Multiple
+Mode: 466.0
 SD: 145.46484786056646
-Variance: 21160.02196309775
-Execution Time: 0.0004 seconds
+Variance: 21229.172361669967
+Execution Time: 0.0012 seconds
 ----------------------------------------
-Resultados para: ./../tests/TC6.txt
+Resultados para: TC6.txt
 Count: 3000
 Mean: 1.8790659927977443e+20
 Median: 1.88008049965543e+20
-Mode: Multiple
+Mode: #N/A
 SD: 1.0738205017381002e+20
-Variance: 1.1530904699530652e+40
+Variance: 1.153474961606934e+40
 Execution Time: 0.0036 seconds
 ----------------------------------------
-Resultados para: ./../tests/TC7.txt
+Resultados para: TC7.txt
 Count: 12767
 Mean: 2.4746739549971625e+20
 Median: 2.4664097307429e+20
-Mode: Multiple
+Mode: #N/A
 SD: 1.446056470098472e+20
-Variance: 2.091079314713653e+40
-Execution Time: 0.0096 seconds
+Variance: 2.0912431153806367e+40
+Execution Time: 0.0081 seconds
 ----------------------------------------

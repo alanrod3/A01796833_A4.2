@@ -4,6 +4,7 @@ Programa para calcular estadísticas descriptivas a partir de un archivo.
 
 import sys
 import time
+import os
 
 
 def calculate_statistics(numbers):
@@ -26,15 +27,27 @@ def calculate_statistics(numbers):
     frequency = {}
     for num in numbers:
         frequency[num] = frequency.get(num, 0) + 1
+    
     max_freq = max(frequency.values())
-    modes = [key for key, val in frequency.items() if val == max_freq]
-    mode = modes[0] if len(modes) == 1 else "Multiple"
+    
+    if max_freq == 1:
+        mode = "#N/A"
+    else:
+        # # En caso de empate, toma el valor más grande
+        modes = [key for key, val in frequency.items() if val == max_freq]
+        mode = max(modes)
 
-    # Varianza Poblacional
-    variance = sum((x - mean) ** 2 for x in numbers) / count
+    # Cálculo auxiliar de suma de cuadrados
+    sum_sq_diff = sum((x - mean) ** 2 for x in numbers)
+
+    # 4. Varianza (N-1)
+    if count > 1:
+        variance = sum_sq_diff / (count - 1)
+    else:
+        variance = 0.0
 
     # Desviación Estándar Poblacional
-    std_dev = variance ** 0.5
+    std_dev = (sum_sq_diff / count) ** 0.5
 
     return count, mean, median, mode, std_dev, variance
 
@@ -68,9 +81,11 @@ def main():
     count, mean, median, mode, std_dev, variance = stats
     elapsed_time = time.time() - start_time
 
+    short_name = os.path.basename(file_name)
+
     # Formateo de resultados
     output = (
-        f"Resultados para: {file_name}\n"
+        f"Resultados para: {short_name}\n"
         f"Count: {count}\n"
         f"Mean: {mean}\n"
         f"Median: {median}\n"
