@@ -17,11 +17,11 @@ def to_binary(n):
     """
     if n == "#VALUE!":
         return "#VALUE!"
-    
+
     val = int(n)
     if val < 0:
         val = val & 0x3FF  # Máscara de 10 bits para negativos
-    
+
     return format(val, 'b').upper()
 
 
@@ -33,11 +33,11 @@ def to_hexadecimal(n):
     """
     if n == "#VALUE!":
         return "#VALUE!"
-    
+
     val = int(n)
     if val < 0:
         val = val & 0xFFFFFFFFFF  # Máscara de 40 bits para negativos
-        
+
     return format(val, 'X').upper()
 
 
@@ -73,7 +73,7 @@ def main():
                 raw_val = line.strip()
                 if not raw_val:
                     continue  # Saltar líneas vacías
-                
+
                 try:
                     # Intentar convertir a float y luego a int (para manejar ej. "5.0")
                     val = int(float(raw_val))
@@ -91,7 +91,7 @@ def main():
     final_report = format_output(file_name, converted_data, total_time)
 
     print(final_report)
-    
+
     # Escribir resultados en el archivo de salida
     try:
         with open("../results/ConvertionResults.txt", "a", encoding='utf-8') as f:
