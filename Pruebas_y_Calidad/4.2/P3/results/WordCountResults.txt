@@ -101,7 +101,7 @@ kodak                1
 significance         1         
 coastal              1         
 -----------------------------------
-Total de palabras distintas: 99
+Total de palabras: 100
 Execution Time: 0.0002 seconds
 
 Resultados para: ./../tests/TC2.txt
@@ -252,8 +252,8 @@ icons                1
 excessive            1         
 jon                  1         
 -----------------------------------
-Total de palabras distintas: 144
-Execution Time: 0.0003 seconds
+Total de palabras: 184
+Execution Time: 0.0011 seconds
 
 Resultados para: ./../tests/TC3.txt
 WORD                 FREQUENCY 
@@ -746,8 +746,8 @@ src                  1
 gradually            1         
 placing              1         
 -----------------------------------
-Total de palabras distintas: 487
-Execution Time: 0.0012 seconds
+Total de palabras: 500
+Execution Time: 0.0013 seconds
 
 Resultados para: ./../tests/TC4.txt
 WORD                 FREQUENCY 
@@ -1702,8 +1702,8 @@ wishlist             1
 expired              1         
 circular             1         
 -----------------------------------
-Total de palabras distintas: 949
-Execution Time: 0.0007 seconds
+Total de palabras: 1000
+Execution Time: 0.0015 seconds
 
 Resultados para: ./../tests/TC5.txt
 WORD                 FREQUENCY 
@@ -5459,6 +5459,6 @@ realty               1
 vaccine              1         
 relocation           1         
 -----------------------------------
-Total de palabras distintas: 3750
-Execution Time: 0.0035 seconds
+Total de palabras: 5000
+Execution Time: 0.0037 seconds
 

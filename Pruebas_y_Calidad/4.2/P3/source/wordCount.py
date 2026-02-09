@@ -38,7 +38,8 @@ def format_word_results(file_name, frequencies, duration):
         lines.append(f"{word:<20} {count:<10}")
 
     lines.append("-" * 35)
-    lines.append(f"Total de palabras distintas: {len(frequencies)}")
+    total_words = sum(frequencies.values())
+    lines.append(f"Total de palabras: {total_words}")
     lines.append(f"Execution Time: {duration:.4f} seconds\n")
     return "\n".join(lines)
 

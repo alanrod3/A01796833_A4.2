@@ -1,6 +1,5 @@
 """
-Módulo para convertir números decimales a binario y hexadecimal.
-Incluye manejo de errores y conversión con complemento a 2 para negativos.
+Módulo para contar la frecuencia de palabras en un archivo de texto.
 """
 
 # pylint: disable=invalid-name
@@ -9,49 +8,42 @@ import sys
 import time
 
 
-def to_binary(n):
-    """
-    Convierte un número entero a binario.
-    Usa una máscara de 10 bits (0x3FF) para representar números negativos
-    en complemento a 2, coincidiendo con los resultados de referencia.
-    """
-    if n == "#VALUE!":
-        return "#VALUE!"
-
-    val = int(n)
-    if val < 0:
-        val = val & 0x3FF  # Máscara de 10 bits para negativos
-
-    return format(val, 'b').upper()
-
-
-def to_hexadecimal(n):
-    """
-    Convierte un número entero a hexadecimal.
-    Usa una máscara de 40 bits (0xFFFFFFFFFF) para representar números negativos
-    en complemento a 2, coincidiendo con los resultados de referencia.
-    """
-    if n == "#VALUE!":
-        return "#VALUE!"
-
-    val = int(n)
-    if val < 0:
-        val = val & 0xFFFFFFFFFF  # Máscara de 40 bits para negativos
-
-    return format(val, 'X').upper()
+def count_word_frequencies(data_lines):
+    """Identifica palabras distintas y cuenta su frecuencia."""
+    frequencies = {}
+    for line in data_lines:
+        # Dividimos por espacios y limpiamos caracteres básicos
+        words = line.split()
+        for word in words:
+            # Limpieza básica para evitar que "Hola," y "Hola" sean diferentes
+            clean_word = word.strip('.,"()!?¿¡').lower()
+            if clean_word:
+                if clean_word in frequencies:
+                    frequencies[clean_word] += 1
+                else:
+                    frequencies[clean_word] = 1
+    return frequencies
 
 
-def format_output(file_name, results, duration):
-    """Genera el string con el formato de tabla para los resultados."""
-    # Se ajustan los encabezados y el espaciado para mayor legibilidad
-    header = f"{'ITEM':<6} {'DECIMAL':<15} {'BINARIO':<25} {'HEX':<20}"
-    lines = [f"Resultados para: {file_name}", header, "-" * 68]
+def format_word_results(file_name, frequencies, duration):
+    """Formatea los resultados del conteo en una tabla clara."""
+    header = f"{'WORD':<20} {'FREQUENCY':<10}"
+    lines = [f"Resultados para: {file_name}", header, "-" * 35]
 
-    for i, (dec, b, h) in enumerate(results, 1):
-        # dec se convierte a string para manejar casos de texto como 'ABC'
-        lines.append(f"{i:<6} {str(dec):<15} {b:<25} {h:<20}")
+    # Ordenamos por frecuencia descendente o alfabético si prefieres
+    sorted_words = sorted(frequencies.items(), key=lambda item: item[1],
+                          reverse=True)
 
-    lines.append("-" * 68)
+    for word, count in sorted_words:
+        lines.append(f"{word:<20} {count:<10}")
+
+    lines.append("-" * 35)
+    
+    # Calculation for total words (sum of all frequencies)
+    total_words = sum(frequencies.values())
+    lines.append(f"Total de palabras: {total_words}")
+    
+    lines.append(f"Total de palabras distintas: {len(frequencies)}")
     lines.append(f"Execution Time: {duration:.4f} seconds\n")
     return "\n".join(lines)
 
@@ -61,45 +53,29 @@ def main():
     start_time = time.time()
 
     if len(sys.argv) != 2:
-        print("Uso: python convertNumbers.py fileWithData.txt")
+        print("Uso: python wordCount.py fileWithData.txt")
         return
 
     file_name = sys.argv[1]
-    converted_data = []
+    raw_lines = []
 
     try:
         with open(file_name, 'r', encoding='utf-8') as file:
-            for line in file:
-                raw_val = line.strip()
-                if not raw_val:
-                    continue  # Saltar líneas vacías
-
-                try:
-                    # Intentar convertir a float y luego a int (para manejar ej. "5.0")
-                    val = int(float(raw_val))
-                    converted_data.append((val, to_binary(val), to_hexadecimal(val)))
-                except ValueError:
-                    # Requerimiento: Si falla, se guarda el dato original y #VALUE!
-                    converted_data.append((raw_val, "#VALUE!", "#VALUE!"))
-                    print(f"Error: Dato inválido -> {raw_val}")
-
+            raw_lines = file.readlines()
     except FileNotFoundError:
         print(f"Error: No se encontró el archivo {file_name}")
         return
+    except Exception as e: # pylint: disable=broad-except
+        print(f"Error al leer el archivo: {e}")
+        return
 
+    word_map = count_word_frequencies(raw_lines)
     total_time = time.time() - start_time
-    final_report = format_output(file_name, converted_data, total_time)
+    final_report = format_word_results(file_name, word_map, total_time)
 
     print(final_report)
-
-    # Escribir resultados en el archivo de salida
-    try:
-        with open("../results/ConvertionResults.txt", "a", encoding='utf-8') as f:
-            f.write(final_report + "\n")
-    except FileNotFoundError:
-        # Fallback por si la carpeta ../results/ no existe
-        with open("ConvertionResults.txt", "a", encoding='utf-8') as f:
-            f.write(final_report + "\n")
+    with open("../results/WordCountResults.txt", "a", encoding='utf-8') as f:
+        f.write(final_report + "\n")
 
 
 if __name__ == "__main__":
